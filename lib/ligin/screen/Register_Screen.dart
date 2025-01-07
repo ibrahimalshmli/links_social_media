@@ -35,50 +35,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     pref = await SharedPreferences.getInstance();
   }
 
-  // Future<void> register() async {
-  //   if (!_formKey.currentState!.validate()) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('Please fill in all fields correctly.')),
-  //     );
-  //     return;
-  //   }
-  //
-  //   try {
-  //     Map<String, dynamic>? response = await NetworkHelper.postData(
-  //       Endpoints.register,
-  //       body: {
-  //         "name": nameController.text,
-  //         "email": emailController.text,
-  //         "password": passwordController.text,
-  //         "password_confirmation": passwordConfirmationController.text,
-  //       },
-  //     );
-  //
-  //     if (response != null && response['status'] == 'success') {
-  //       registerUser();
-  //
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text('Registration Successful!')),
-  //       );
-  //
-  //       Navigator.pushReplacement(
-  //         context,
-  //         MaterialPageRoute(builder: (_) => HomeScreen()),
-  //       );
-  //     } else {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text(response?['message'] ?? 'Registration failed.'),
-  //         ),
-  //       );
-  //     }
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(
-  //       context,
-  //     ).showSnackBar(SnackBar(content: Text('Error: $e')));
-  //   }
-  // }
-
   void registerUser() {
     final User user = User(
       name: nameController.text,

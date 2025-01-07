@@ -5,5 +5,5 @@ class Endpoints {
   static const String links = "$baseUrl/links";
   static const String follow = "$baseUrl/followr";
   static const String search = "$baseUrl/search";
-  static const String token = "242|4d1O1EcfEe03JArDWcJA3TovVfhtMG4uRhioFALN";
+  static const String token = "508|Zns3ybNJNWQKcEDbGdamuy9ENiboo3tR1KGLvph5";
 }

@@ -37,9 +37,9 @@ Widget customTextField(
   dynamic validator;
   return Container(
     padding: const EdgeInsets.symmetric(vertical: 8),
-    child: Card(
-      elevation: 8,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    child: Form(
+      //  elevation: 8,
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: TextFormField(
         validator: validator,
 
@@ -67,9 +67,9 @@ Widget customPasswordTextField(
   dynamic validator;
   return Container(
     padding: const EdgeInsets.symmetric(vertical: 8),
-    child: Card(
-      elevation: 8,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    child: Form(
+      //elevation: 8,
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: TextFormField(
         obscureText: true,
         validator: validator,

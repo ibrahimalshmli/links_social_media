@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:links_social_media/ligin/network/collaction.dart';
 import 'package:links_social_media/ligin/widget/button_widget.dart';
 import 'package:links_social_media/ligin/widget/textfiled_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewLinkScreen extends StatelessWidget {
   NewLinkScreen({super.key});
@@ -9,6 +10,17 @@ class NewLinkScreen extends StatelessWidget {
   TextEditingController linkController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   // bool? isActive;
+
+  Future<void> openUrl(String url, BuildContext context) async {
+    final Uri uri = Uri.parse(linkController.text);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('لا يمكن فتح الرابط')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +83,7 @@ class NewLinkScreen extends StatelessWidget {
                       title: titleController.text,
                       link: linkController.text,
                       username: usernameController.text,
-                      // isActive: true,
+                      isActive: "1",
                     );
                     // Navigator.pop(context);
                   },
