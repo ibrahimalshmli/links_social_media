@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:links_social_media/ligin/network/collaction.dart';
+import 'package:links_social_media/ligin/network/Request/Link/add_link.dart';
 import 'package:links_social_media/ligin/widget/button_widget.dart';
 import 'package:links_social_media/ligin/widget/textfiled_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -77,8 +77,7 @@ class NewLinkScreen extends StatelessWidget {
                 child: ButtonWidget(
                   text: "ADD",
                   onPressed: () async {
-                    Colaction colaction = Colaction();
-                    await colaction.AddLink(
+                    await AddLink(
                       context: context,
                       title: titleController.text,
                       link: linkController.text,

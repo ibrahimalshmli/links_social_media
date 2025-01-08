@@ -2,12 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:http/http.dart';
-import 'package:links_social_media/ligin/network/endpoints.dart';
 import 'package:links_social_media/model/mymodel.dart';
+import 'package:links_social_media/screens/Edit_Profile.dart';
 import 'package:links_social_media/widgets/Navigation_Bar.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../ligin/network/Request/Link/get_link.dart';
 import 'New_Link_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -18,65 +19,26 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  List<LinkMymodel> linkMymodel = [];
-
   User? user;
 
-  Future<void> getLink(String url) async {
-    try {
-      Response response = await get(
-        Uri.parse(Endpoints.links),
-        headers: {
-          "Authorization": "Bearer ${Endpoints.token}",
-          "Content-Type": "application/json",
-        },
-      );
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic>? map = jsonDecode(response.body);
-        if (map != null) {
-          List list = map["links"];
-          for (int i = 0; i < list.length; i++) {
-            linkMymodel.add(
-              LinkMymodel(
-                title: list[i]["title"],
-                link: list[i]["link"],
-                username: list[i]["username"],
-                isActive: list[i]["isActive"],
-              ),
-            );
-          }
-
-          setState(() {});
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${response.statusCode}')),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Exception: $e')));
-    }
-  }
-
-  @override
   @override
   void initState() {
+    super.initState();
     initPreferences();
 
-    getLink(Endpoints.links);
-    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<GetLinks>(context, listen: false).getLink("");
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final getLinks = Provider.of<GetLinks>(context);
+
     return Scaffold(
       appBar: AppBar(),
-      // automaticallyImplyLeading: false),
       body:
-          linkMymodel == null
+          getLinks.linkMymodel.isEmpty
               ? const Center(child: CircularProgressIndicator())
               : Padding(
                 padding: const EdgeInsets.symmetric(
@@ -92,7 +54,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     SizedBox(
                       width: double.infinity,
-
                       child: Container(
                         decoration: BoxDecoration(
                           color: Color(0xff2D2B4E),
@@ -118,64 +79,62 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "${user?.name}",
+                                      "${user?.name ?? 'Guest'}",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20,
                                       ),
                                     ),
                                     Text(
-                                      "${user?.email}",
+                                      "${user?.email ?? 'example@example.com'}",
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 13,
                                       ),
                                     ),
                                     SizedBox(height: 30),
-                                    Container(
-                                      child: Row(
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: Color(0xffFFD465),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              5,
                                             ),
-                                            child: InkWell(
-                                              onTap: () {},
-                                              child: Text(
-                                                "followers",
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                            height: 20,
-                                            width: 80,
+                                            color: Color(0xffFFD465),
                                           ),
-                                          SizedBox(width: 10),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              color: Color(0xffFFD465),
+                                          child: InkWell(
+                                            onTap: () {},
+                                            child: Text(
+                                              "followers",
+                                              textAlign: TextAlign.center,
                                             ),
-                                            child: InkWell(
-                                              onTap: () {},
-                                              child: Text(
-                                                "following",
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                            height: 20,
-                                            width: 80,
                                           ),
-                                        ],
-                                      ),
+                                          height: 20,
+                                          width: 80,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              5,
+                                            ),
+                                            color: Color(0xffFFD465),
+                                          ),
+                                          child: InkWell(
+                                            onTap: () {},
+                                            child: Text(
+                                              "following",
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          height: 20,
+                                          width: 80,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
                               ),
-                              // Column(
-                              //   children: [
                               IconButton(
                                 onPressed: () {},
                                 icon: Icon(Icons.edit),
@@ -183,99 +142,99 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ],
                           ),
-                          //   ],
-                          // ),
                         ),
                       ),
                     ),
                     SizedBox(height: 20),
-
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: linkMymodel.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 8.0,
-                              horizontal: 10.0,
-                            ), // مسافة بين العناصر
-                            child: Slidable(
-                              startActionPane: ActionPane(
-                                motion: StretchMotion(),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (context) {},
-                                    backgroundColor: Color(0xffF56C61),
-                                    borderRadius: BorderRadius.circular(20),
-                                    icon: Icons.delete,
-                                  ),
-                                  SizedBox(width: 15),
-                                  SlidableAction(
-                                    onPressed: (context) {},
-                                    backgroundColor: Color(0xffFFD465),
-                                    borderRadius: BorderRadius.circular(20),
-                                    icon: Icons.edit,
-                                  ),
-                                  SizedBox(width: 15),
-                                ],
-                              ),
-
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color:
-                                      index % 2 == 0
-                                          ? Color(0xffFEE2E7)
-                                          : Color(
-                                            0xffE7E5F1,
-                                          ), // تناوب تلقائي للألوان
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: ListTile(
-                                  contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 5,
-                                  ),
-                                  title: Text(
-                                    '${linkMymodel[index].title}',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black87,
-                                    ),
-                                  ),
-                                  subtitle: Text(
-                                    "${linkMymodel[index].link}",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.blueGrey,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
+                      child: RefreshIndicator(
+                        onRefresh: () async {
+                          await getLinks.getLink('');
                         },
+                        child: ListView.builder(
+                          itemCount: getLinks.linkMymodel.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 10.0,
+                              ),
+                              child: Slidable(
+                                startActionPane: ActionPane(
+                                  motion: StretchMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: (context) {},
+                                      backgroundColor: Color(0xffF56C61),
+                                      borderRadius: BorderRadius.circular(20),
+                                      icon: Icons.delete,
+                                    ),
+                                    SizedBox(width: 15),
+                                    SlidableAction(
+                                      onPressed: (context) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) {
+                                              return EditScreen(
+                                                linkData:
+                                                    getLinks.linkMymodel[index],
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      },
+                                      backgroundColor: Color(0xffFFD465),
+                                      borderRadius: BorderRadius.circular(20),
+                                      icon: Icons.edit,
+                                    ),
+                                  ],
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color:
+                                        index % 2 == 0
+                                            ? Color(0xffFEE2E7)
+                                            : Color(0xffE7E5F1),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 5,
+                                    ),
+                                    title: Text(
+                                      '${getLinks.linkMymodel[index].title}',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    subtitle: Text(
+                                      "${getLinks.linkMymodel[index].link}",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Colors.blueGrey,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ),
-
-                      //     );
-                      //   },
-                      // ),
                     ),
                   ],
                 ),
               ),
-
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff2D2B4E),
-
         onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) {
-                return NewLinkScreen();
-              },
-            ),
-          );
+          Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (_) => NewLinkScreen()));
         },
         child: Icon(Icons.add, color: Colors.white),
       ),

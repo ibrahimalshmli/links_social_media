@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:links_social_media/ligin/network/collaction.dart';
+import 'package:links_social_media/ligin/network/Request/register.dart';
 import 'package:links_social_media/ligin/widget/button_register.dart';
 import 'package:links_social_media/ligin/widget/button_widget.dart';
 import 'package:links_social_media/ligin/widget/textfiled_widget.dart';
@@ -160,8 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         );
                       } else {
-                        Colaction colaction = Colaction();
-                        await colaction.Register(
+                        Register(
                           context: context,
                           name: nameController.text,
                           email: emailController.text,

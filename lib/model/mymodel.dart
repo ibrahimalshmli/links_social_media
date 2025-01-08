@@ -2,6 +2,7 @@ class User {
   final int id;
   final String name;
   final String email;
+
   // final String createdAt;
   // final String updatedAt;
 
