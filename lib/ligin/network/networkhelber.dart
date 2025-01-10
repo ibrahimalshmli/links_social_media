@@ -1,19 +1,28 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:links_social_media/ligin/network/save_token.dart';
 
 class NetworkHelper {
   static Future<Map<String, dynamic>?> getData(
     String url,
     Map<String, String>? headers,
+    BuildContext context,
   ) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('auth_token');
+    String? token = await SharedPreferencesHelper.getToken();
 
+    print('##################${token}');
+
+    // التحقق إذا كان التوكن موجودًا
+    if (token == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Token not found. Please login again.')),
+      );
+    }
     Response response = await get(
       Uri.parse(url),
-      //  headers: {"Authorization": token!},
+      headers: {"Authorization": token!},
     );
     if (response.statusCode == 200) {
       Map<String, dynamic> map = jsonDecode(response.body);
@@ -27,12 +36,10 @@ class NetworkHelper {
     Map<String, String>? headers,
     Map<String, String>? body,
   }) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('auth_token');
-
     Response response = await post(
       Uri.parse(url),
-      headers: {"Authorization": token!},
+      //  headers: {"Authorization": token!},
+      body: body,
     );
     if (response.statusCode == 200) {
       Map<String, dynamic> map = jsonDecode(response.body);
@@ -42,13 +49,21 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>?> PutData(
+    BuildContext context,
     String url, {
     Map<String, String>? headers,
     Map<String, String>? body,
   }) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('auth_token');
+    String? token = await SharedPreferencesHelper.getToken();
 
+    print('##################${token}');
+
+    // التحقق إذا كان التوكن موجودًا
+    if (token == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Token not found. Please login again.')),
+      );
+    }
     Response response = await put(
       Uri.parse(url),
       headers: {"Authorization": token!},
@@ -62,13 +77,21 @@ class NetworkHelper {
   }
 
   static Future<Map<String, dynamic>?> deleteData(
+    BuildContext context,
     String url, {
     Map<String, String>? headers,
     required Map<String, String> body,
   }) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('auth_token');
+    String? token = await SharedPreferencesHelper.getToken();
 
+    print('##################${token}');
+
+    // التحقق إذا كان التوكن موجودًا
+    if (token == null) {
+      ScaffoldMessenger.of(context!).showSnackBar(
+        SnackBar(content: Text('Token not found. Please login again.')),
+      );
+    }
     Response response = await delete(
       Uri.parse(url),
       headers: {"Authorization": token!},

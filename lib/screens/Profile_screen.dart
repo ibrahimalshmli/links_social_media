@@ -27,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     initPreferences();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<GetLinks>(context, listen: false).getLink("");
+      Provider.of<GetLinks>(context, listen: false).getLink('', context);
     });
   }
 
@@ -37,121 +37,114 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(),
-      body:
-          getLinks.linkMymodel.isEmpty
-              ? const Center(child: CircularProgressIndicator())
-              : Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 10,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Column(
+          children: [
+            Text(
+              "Profile",
+              style: TextStyle(fontSize: 40),
+              textAlign: TextAlign.end,
+            ),
+            SizedBox(
+              width: double.infinity,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color(0xff2D2B4E),
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                child: Column(
-                  children: [
-                    Text(
-                      "Profile",
-                      style: TextStyle(fontSize: 40),
-                      textAlign: TextAlign.end,
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xff2D2B4E),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        height: 150,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CircleAvatar(
-                                radius: 50,
-                                backgroundImage: AssetImage(
-                                  "assets/images/Mask group.png",
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(5),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "${user?.name ?? 'Guest'}",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                      ),
-                                    ),
-                                    Text(
-                                      "${user?.email ?? 'example@example.com'}",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                    SizedBox(height: 30),
-                                    Row(
-                                      children: [
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              5,
-                                            ),
-                                            color: Color(0xffFFD465),
-                                          ),
-                                          child: InkWell(
-                                            onTap: () {},
-                                            child: Text(
-                                              "followers",
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                          height: 20,
-                                          width: 80,
-                                        ),
-                                        SizedBox(width: 10),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              5,
-                                            ),
-                                            color: Color(0xffFFD465),
-                                          ),
-                                          child: InkWell(
-                                            onTap: () {},
-                                            child: Text(
-                                              "following",
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                          height: 20,
-                                          width: 80,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.edit),
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
+                height: 150,
+                child: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: AssetImage(
+                          "assets/images/Mask group.png",
                         ),
                       ),
-                    ),
-                    SizedBox(height: 20),
-                    Expanded(
-                      child: RefreshIndicator(
-                        onRefresh: () async {
-                          await getLinks.getLink('');
-                        },
-                        child: ListView.builder(
+                      Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${user?.name ?? 'Guest'}",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
+                            ),
+                            Text(
+                              "${user?.email ?? 'example@example.com'}",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                              ),
+                            ),
+                            SizedBox(height: 30),
+                            Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Color(0xffFFD465),
+                                  ),
+                                  child: InkWell(
+                                    onTap: () {},
+                                    child: Text(
+                                      "followers",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  height: 20,
+                                  width: 80,
+                                ),
+                                SizedBox(width: 10),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: Color(0xffFFD465),
+                                  ),
+                                  child: InkWell(
+                                    onTap: () {},
+                                    child: Text(
+                                      "following",
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  height: 20,
+                                  width: 80,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.edit),
+                        color: Colors.white,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () async {
+                  await getLinks.getLink('', context);
+                },
+                child:
+                    getLinks.linkMymodel.isEmpty
+                        ? const Center(child: CircularProgressIndicator())
+                        : ListView.builder(
                           itemCount: getLinks.linkMymodel.length,
                           itemBuilder: (context, index) {
                             return Padding(
@@ -224,11 +217,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             );
                           },
                         ),
-                      ),
-                    ),
-                  ],
-                ),
               ),
+            ),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Color(0xff2D2B4E),
         onPressed: () {

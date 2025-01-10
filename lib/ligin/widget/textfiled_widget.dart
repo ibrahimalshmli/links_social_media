@@ -32,7 +32,7 @@ import 'package:flutter/material.dart';
 Widget customTextField(
   controller,
   label, {
-  required Function(dynamic value) validator,
+  required Function(String value) validator,
 }) {
   dynamic validator;
   return Container(
@@ -62,7 +62,7 @@ Widget customTextField(
 Widget customPasswordTextField(
   controller,
   label, {
-  required Function(dynamic value) validator,
+  required Function(String value) validator,
 }) {
   dynamic validator;
   return Container(

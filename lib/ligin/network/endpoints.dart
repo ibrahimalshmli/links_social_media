@@ -6,5 +6,4 @@ class Endpoints {
   static const String edtlinks = "$baseUrl/links/{id}";
   static const String follow = "$baseUrl/followr";
   static const String search = "$baseUrl/search";
-  //static const String token = "515|zBHkvLPKdOjDqVrN64pgYAjmdy14CM5s2Z5J0MEs";
 }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:links_social_media/ligin/network/Request/register.dart';
+import 'package:links_social_media/ligin/network/Request/login/register.dart';
 import 'package:links_social_media/ligin/widget/button_register.dart';
 import 'package:links_social_media/ligin/widget/button_widget.dart';
 import 'package:links_social_media/ligin/widget/textfiled_widget.dart';

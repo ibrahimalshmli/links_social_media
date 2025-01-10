@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:links_social_media/ligin/network/endpoints.dart';
 import 'package:links_social_media/ligin/network/networkhelber.dart';
-import 'package:links_social_media/screens/homescrren.dart';
+import 'package:links_social_media/ligin/screen/Login_Screen.dart';
 
 Future<void> Register({
   required BuildContext context,
@@ -13,6 +13,7 @@ Future<void> Register({
   try {
     Map<String, dynamic>? response = await NetworkHelper.postData(
       Endpoints.register,
+
       body: {
         "name": name, // Corrected to use .text
         "email": email,
@@ -26,7 +27,7 @@ Future<void> Register({
       context,
       MaterialPageRoute(
         builder: (_) {
-          return HomeScreen();
+          return LoginScreen();
         },
       ),
     );
