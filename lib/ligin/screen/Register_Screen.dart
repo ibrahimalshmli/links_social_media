@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:links_social_media/ligin/network/collaction.dart';
+import 'package:links_social_media/ligin/network/Request/login/register.dart';
 import 'package:links_social_media/ligin/widget/button_register.dart';
 import 'package:links_social_media/ligin/widget/button_widget.dart';
 import 'package:links_social_media/ligin/widget/textfiled_widget.dart';
@@ -34,50 +34,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> initializeSharedPreferences() async {
     pref = await SharedPreferences.getInstance();
   }
-
-  // Future<void> register() async {
-  //   if (!_formKey.currentState!.validate()) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('Please fill in all fields correctly.')),
-  //     );
-  //     return;
-  //   }
-  //
-  //   try {
-  //     Map<String, dynamic>? response = await NetworkHelper.postData(
-  //       Endpoints.register,
-  //       body: {
-  //         "name": nameController.text,
-  //         "email": emailController.text,
-  //         "password": passwordController.text,
-  //         "password_confirmation": passwordConfirmationController.text,
-  //       },
-  //     );
-  //
-  //     if (response != null && response['status'] == 'success') {
-  //       registerUser();
-  //
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(content: Text('Registration Successful!')),
-  //       );
-  //
-  //       Navigator.pushReplacement(
-  //         context,
-  //         MaterialPageRoute(builder: (_) => HomeScreen()),
-  //       );
-  //     } else {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text(response?['message'] ?? 'Registration failed.'),
-  //         ),
-  //       );
-  //     }
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(
-  //       context,
-  //     ).showSnackBar(SnackBar(content: Text('Error: $e')));
-  //   }
-  // }
 
   void registerUser() {
     final User user = User(
@@ -204,8 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         );
                       } else {
-                        Colaction colaction = Colaction();
-                        await colaction.Register(
+                        Register(
                           context: context,
                           name: nameController.text,
                           email: emailController.text,

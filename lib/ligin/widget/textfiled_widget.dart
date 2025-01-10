@@ -32,14 +32,14 @@ import 'package:flutter/material.dart';
 Widget customTextField(
   controller,
   label, {
-  required Function(dynamic value) validator,
+  required Function(String value) validator,
 }) {
   dynamic validator;
   return Container(
     padding: const EdgeInsets.symmetric(vertical: 8),
-    child: Card(
-      elevation: 8,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    child: Form(
+      //  elevation: 8,
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: TextFormField(
         validator: validator,
 
@@ -62,14 +62,14 @@ Widget customTextField(
 Widget customPasswordTextField(
   controller,
   label, {
-  required Function(dynamic value) validator,
+  required Function(String value) validator,
 }) {
   dynamic validator;
   return Container(
     padding: const EdgeInsets.symmetric(vertical: 8),
-    child: Card(
-      elevation: 8,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    child: Form(
+      //elevation: 8,
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: TextFormField(
         obscureText: true,
         validator: validator,

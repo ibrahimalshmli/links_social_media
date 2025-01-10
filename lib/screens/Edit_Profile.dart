@@ -1,25 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:links_social_media/ligin/network/Request/Link/add_link.dart';
 import 'package:links_social_media/ligin/widget/button_widget.dart';
 import 'package:links_social_media/ligin/widget/textfiled_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
-class NewLinkScreen extends StatelessWidget {
-  NewLinkScreen({super.key});
-  TextEditingController titleController = TextEditingController();
-  TextEditingController linkController = TextEditingController();
-  TextEditingController usernameController = TextEditingController();
-  // bool? isActive;
+import '../ligin/network/Request/Link/edit_link.dart';
+import '../model/mymodel.dart';
 
-  Future<void> openUrl(String url, BuildContext context) async {
-    final Uri uri = Uri.parse(linkController.text);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('لا يمكن فتح الرابط')));
-    }
+class EditScreen extends StatefulWidget {
+  final LinkMymodel linkData;
+
+  EditScreen({super.key, required this.linkData});
+
+  @override
+  State<EditScreen> createState() => _EditScreenState();
+}
+
+class _EditScreenState extends State<EditScreen> {
+  late TextEditingController titleController;
+  late TextEditingController linkController;
+  late TextEditingController usernameController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    titleController = TextEditingController(text: widget.linkData!.title);
+    linkController = TextEditingController(text: widget.linkData!.link);
+    usernameController = TextEditingController(text: widget.linkData!.username);
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    linkController.dispose();
+    usernameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -77,12 +91,12 @@ class NewLinkScreen extends StatelessWidget {
                 child: ButtonWidget(
                   text: "ADD",
                   onPressed: () async {
-                    await AddLink(
+                    await editLink(
                       context: context,
                       title: titleController.text,
                       link: linkController.text,
                       username: usernameController.text,
-                      isActive: "1",
+                      isActive: true,
                     );
                     // Navigator.pop(context);
                   },

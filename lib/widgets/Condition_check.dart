@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:links_social_media/ligin/network/endpoints.dart';
 import 'package:links_social_media/ligin/screen/Login_Screen.dart';
-import 'package:links_social_media/screens/homescrren.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 bool IsloggedIn = false;
@@ -30,14 +28,14 @@ class _AuthState extends State<Auth> {
     bool isloggedIn = await _authService.isloggedIn();
     if (isloggedIn) {
       {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) {
-              return HomeScreen();
-            },
-          ),
-        );
+        // Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (_) {
+        //       return HomeScreen();
+        //     },
+        //   ),
+        // );
       }
     }
   }
@@ -56,19 +54,5 @@ class AuthService {
   Future<void> login() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("IsloggedIn", true);
-  }
-}
-
-class TokenManager {
-  static const String _tokenKey = Endpoints.token;
-
-  static Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_tokenKey, token);
-  }
-
-  static Future<String?> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(_tokenKey);
   }
 }
