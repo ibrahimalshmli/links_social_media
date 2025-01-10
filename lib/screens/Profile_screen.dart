@@ -1,14 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:links_social_media/model/mymodel.dart';
-import 'package:links_social_media/screens/Edit_Profile.dart';
 import 'package:links_social_media/widgets/Navigation_Bar.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../ligin/network/Request/Link/get_link.dart';
+import '../widgets/Link_Information.dart';
 import 'New_Link_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -24,10 +20,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    initPreferences();
+    //  initPreferences();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<GetLinks>(context, listen: false).getLink('', context);
+      Provider.of<GetLinks>(context, listen: false).getLink(context);
     });
   }
 
@@ -136,89 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             SizedBox(height: 20),
-            Expanded(
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  await getLinks.getLink('', context);
-                },
-                child:
-                    getLinks.linkMymodel.isEmpty
-                        ? const Center(child: CircularProgressIndicator())
-                        : ListView.builder(
-                          itemCount: getLinks.linkMymodel.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8.0,
-                                horizontal: 10.0,
-                              ),
-                              child: Slidable(
-                                startActionPane: ActionPane(
-                                  motion: StretchMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (context) {},
-                                      backgroundColor: Color(0xffF56C61),
-                                      borderRadius: BorderRadius.circular(20),
-                                      icon: Icons.delete,
-                                    ),
-                                    SizedBox(width: 15),
-                                    SlidableAction(
-                                      onPressed: (context) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (_) {
-                                              return EditScreen(
-                                                linkData:
-                                                    getLinks.linkMymodel[index],
-                                              );
-                                            },
-                                          ),
-                                        );
-                                      },
-                                      backgroundColor: Color(0xffFFD465),
-                                      borderRadius: BorderRadius.circular(20),
-                                      icon: Icons.edit,
-                                    ),
-                                  ],
-                                ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color:
-                                        index % 2 == 0
-                                            ? Color(0xffFEE2E7)
-                                            : Color(0xffE7E5F1),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: ListTile(
-                                    contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 5,
-                                    ),
-                                    title: Text(
-                                      '${getLinks.linkMymodel[index].title}',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                    subtitle: Text(
-                                      "${getLinks.linkMymodel[index].link}",
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.blueGrey,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-              ),
-            ),
+            buildExpanded(getLinks, context),
           ],
         ),
       ),
@@ -233,16 +147,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       bottomNavigationBar: NavigationBarWidget(),
     );
-  }
-
-  void initPreferences() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    String? userData = pref.getString("userData");
-
-    if (userData != null) {
-      setState(() {
-        user = User.fromJson(jsonDecode(userData));
-      });
-    }
   }
 }

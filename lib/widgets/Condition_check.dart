@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:links_social_media/ligin/screen/Login_Screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../screens/homescrren.dart';
+
 bool IsloggedIn = false;
 const String username = "username";
 
@@ -28,14 +30,14 @@ class _AuthState extends State<Auth> {
     bool isloggedIn = await _authService.isloggedIn();
     if (isloggedIn) {
       {
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (_) {
-        //       return HomeScreen();
-        //     },
-        //   ),
-        // );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) {
+              return HomeScreen();
+            },
+          ),
+        );
       }
     }
   }
