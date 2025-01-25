@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:links_social_media/ligin/network/endpoints.dart';
 import 'package:links_social_media/ligin/network/save_token.dart';
-import 'package:links_social_media/model/mymodel.dart';
+
+import '../../../../model/mymodel.dart';
 
 class GetLinks extends ChangeNotifier {
   List<LinkMymodel> linkMymodel = [];

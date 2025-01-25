@@ -112,8 +112,7 @@ Expanded buildExpanded(GetLinks getLinks, BuildContext context) {
 Future<void> deletLink(String id, BuildContext context) async {
   try {
     String? token = await SharedPreferencesHelper.getToken();
-    print(token);
-    print(id);
+
     final response = await http.delete(
       Uri.parse("${Endpoints.edtlinks}$id"),
 
@@ -128,7 +127,6 @@ Future<void> deletLink(String id, BuildContext context) async {
         const SnackBar(content: Text('Link deleted successfully!')),
       );
 
-      // تحديث البيانات بعد الحذف
       Provider.of<GetLinks>(context, listen: false).getLink(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

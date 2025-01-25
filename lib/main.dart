@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:links_social_media/ligin/network/Request/Link/edit_link.dart';
-import 'package:links_social_media/model/links_item.dart';
 import 'package:links_social_media/widgets/Condition_check.dart';
 import 'package:provider/provider.dart';
 
 import 'ligin/network/Request/Link/get_link.dart';
+import 'ligin/network/Request/followers/getfollowers.dart';
+import 'ligin/network/Request/location/location.dart';
+import 'ligin/network/user_providre.dart';
+import 'model/mymodel.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,11 +20,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<Item>(create: (BuildContext context) => Item()),
         ChangeNotifierProvider<GetLinks>(create: (context) => GetLinks()),
         ChangeNotifierProvider(create: (_) => EditProvider()),
-        //  ChangeNotifierProvider<DeleteLinks>(create: (context) => DeleteLinks()),
-        // ChangeNotifierProvider<DleteLink>(create: (context) => DleteLink()),
+        ChangeNotifierProvider(create: (_) => FollowApi()),
+        ChangeNotifierProvider(create: (_) => EditLocatino()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => ActiveSharingProvider()),
+        // ChangeNotifierProvider(create: (_) => NetworkService()),
+        //  ChangeNotifierProvider(create: (_) => FetchUser()),
       ],
       child: MaterialApp(
         debugShowMaterialGrid: false,
@@ -29,5 +35,16 @@ class MyApp extends StatelessWidget {
         home: Auth(),
       ),
     );
+  }
+}
+
+class UserProvider extends ChangeNotifier {
+  User? _user;
+
+  User? get user => _user;
+
+  void setUser(User user) {
+    _user = user;
+    notifyListeners();
   }
 }

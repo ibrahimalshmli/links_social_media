@@ -38,7 +38,7 @@ class NetworkHelper {
   }) async {
     Response response = await post(
       Uri.parse(url),
-      //  headers: {"Authorization": token!},
+      headers: headers,
       body: body,
     );
     if (response.statusCode == 200) {

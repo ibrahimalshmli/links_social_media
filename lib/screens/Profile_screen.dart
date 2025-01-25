@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:links_social_media/model/mymodel.dart';
 import 'package:links_social_media/widgets/Navigation_Bar.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../ligin/network/Request/Link/get_link.dart';
 import '../widgets/Link_Information.dart';
 import 'New_Link_screen.dart';
+import 'following_scrren.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({super.key});
@@ -20,7 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    //  initPreferences();
+    initPreferences();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<GetLinks>(context, listen: false).getLink(context);
@@ -29,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final getLinks = Provider.of<GetLinks>(context);
+    final getLinks = Provider.of<GetLinks>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(),
@@ -91,7 +95,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     color: Color(0xffFFD465),
                                   ),
                                   child: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      // Navigator.pushReplacement(
+                                      //   context,
+                                      //   MaterialPageRoute(
+                                      //     builder: (_) {
+                                      //       return FollowersScreen();
+                                      //     },
+                                      //   ),
+                                      // );
+                                    },
                                     child: Text(
                                       "followers",
                                       textAlign: TextAlign.center,
@@ -107,7 +120,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     color: Color(0xffFFD465),
                                   ),
                                   child: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) {
+                                            return FollowingScreen();
+                                          },
+                                        ),
+                                      );
+                                    },
                                     child: Text(
                                       "following",
                                       textAlign: TextAlign.center,
@@ -147,5 +169,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       bottomNavigationBar: NavigationBarWidget(),
     );
+  }
+
+  void initPreferences() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String? userData = pref.getString("userData");
+
+    if (userData != null) {
+      setState(() {
+        user = User.fromJson(jsonDecode(userData));
+      });
+    }
   }
 }

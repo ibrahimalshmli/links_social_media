@@ -1,76 +1,51 @@
-class User {
-  final int id;
-  final String name;
-  final String email;
+import 'dart:convert';
 
-  // final String createdAt;
-  // final String updatedAt;
+Users usersFromJson(String str) => Users.fromJson(json.decode(str));
+
+String usersToJson(Users data) => json.encode(data.toJson());
+
+class Users {
+  User user;
+  String token;
+
+  Users({required this.user, required this.token});
+
+  factory Users.fromJson(Map<String, dynamic> json) =>
+      Users(user: User.fromJson(json["user"]), token: json["token"]);
+
+  Map<String, dynamic> toJson() => {"user": user.toJson(), "token": token};
+}
+
+class User {
+  int id;
+  String name;
+  String email;
+  double long;
+  double lat;
 
   User({
     required this.id,
     required this.name,
     required this.email,
-    // required this.createdAt,
-    // required this.updatedAt,
+    required this.long,
+    required this.lat,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      id: json['id'],
-      name: json['name'],
-      email: json['email'],
-      // createdAt: json['created_at'],
-      // updatedAt: json['updated_at'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'email': email,
-      // 'created_at': createdAt,
-      // 'updated_at': updatedAt,
-    };
-  }
-}
-
-class AuthRequest {
-  String? email;
-  String? password;
-  String? name;
-  String? passwordConfirmation;
-
-  AuthRequest({
-    this.email,
-    this.password,
-    this.name,
-    this.passwordConfirmation,
-  });
+  factory User.fromJson(Map<String, dynamic> json) => User(
+    id: json["id"],
+    name: json["name"],
+    email: json["email"],
+    long: json["long"]?.toDouble(),
+    lat: json["lat"]?.toDouble(),
+  );
 
   Map<String, dynamic> toJson() => {
-    'email': email,
-    'password': password,
-    'name': name,
-    'password_confirmation': passwordConfirmation,
+    "id": id,
+    "name": name,
+    "email": email,
+    "long": long,
+    "lat": lat,
   };
-}
-
-class UserLocationUpdate {
-  String lat;
-  String long;
-
-  UserLocationUpdate({required this.lat, required this.long});
-
-  Map<String, dynamic> toJson() => {'lat': lat, 'long': long};
-}
-
-class ActiveSharing {
-  String type;
-
-  ActiveSharing({required this.type});
-
-  Map<String, dynamic> toJson() => {'type': type};
 }
 
 class LinkMymodel {
@@ -117,20 +92,4 @@ class LinkMymodel {
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
   };
-}
-
-class FollowRequest {
-  String followeeId;
-
-  FollowRequest({required this.followeeId});
-
-  Map<String, dynamic> toJson() => {'followee_id': followeeId};
-}
-
-class SearchRequest {
-  String name;
-
-  SearchRequest({required this.name});
-
-  Map<String, dynamic> toJson() => {'name': name};
 }

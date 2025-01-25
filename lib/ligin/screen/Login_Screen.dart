@@ -3,6 +3,7 @@ import 'package:links_social_media/ligin/network/Request/login/login.dart';
 import 'package:links_social_media/ligin/screen/Register_Screen.dart';
 import 'package:links_social_media/ligin/widget/button_widget.dart';
 
+import '../../widgets/Condition_check.dart';
 import '../widget/button_register.dart';
 import '../widget/textfiled_widget.dart';
 
@@ -14,7 +15,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  //final AuthService _authService = AuthService();
+  final AuthService _authService = AuthService();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -75,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ButtonWidget(
                     text: "LOGIN",
                     onPressed: () async {
-                      //  await _authService.login();
+                      await _authService.logins();
                       if (_formKey.currentState!.validate() ?? false) {
                         login(
                           //context: context,
