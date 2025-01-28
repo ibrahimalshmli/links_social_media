@@ -7,8 +7,10 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../ligin/network/Request/Link/get_link.dart';
+import '../ligin/network/Request/followers/postfollowers.dart';
 import '../widgets/Link_Information.dart';
 import 'New_Link_screen.dart';
+import 'followers_scrren.dart';
 import 'following_scrren.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -33,6 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final followersApi = Provider.of<FollowersApi>(context);
     final getLinks = Provider.of<GetLinks>(context, listen: false);
 
     return Scaffold(
@@ -96,14 +99,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   child: InkWell(
                                     onTap: () {
-                                      // Navigator.pushReplacement(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (_) {
-                                      //       return FollowersScreen();
-                                      //     },
-                                      //   ),
-                                      // );
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) {
+                                            return FollowersPage();
+                                          },
+                                        ),
+                                      );
+                                      Text(
+                                        'Followers: ${followersApi.followerCount}',
+                                        style: TextStyle(fontSize: 16),
+                                      );
                                     },
                                     child: Text(
                                       "followers",
@@ -131,8 +138,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       );
                                     },
                                     child: Text(
-                                      "following",
-                                      textAlign: TextAlign.center,
+                                      'Followers: ${followersApi.followerCount}',
+                                      style: TextStyle(fontSize: 13),
                                     ),
                                   ),
                                   height: 20,

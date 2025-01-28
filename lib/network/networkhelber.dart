@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-import 'package:links_social_media/ligin/network/save_token.dart';
+import 'package:links_social_media/network/save_token.dart';
 
 class NetworkHelper {
   static Future<Map<String, dynamic>?> getData(

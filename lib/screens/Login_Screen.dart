@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:links_social_media/ligin/network/Request/login/login.dart';
-import 'package:links_social_media/ligin/screen/Register_Screen.dart';
-import 'package:links_social_media/ligin/widget/button_widget.dart';
 
-import '../../widgets/Condition_check.dart';
-import '../widget/button_register.dart';
-import '../widget/textfiled_widget.dart';
+import '../widgets/Condition_check.dart';
+import '../widgets/button_register.dart';
+import '../widgets/button_widget.dart';
+import '../widgets/textfiled_widget.dart';
+import 'Register_Screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

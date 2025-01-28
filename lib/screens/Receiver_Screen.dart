@@ -1,110 +1,182 @@
-// import 'dart:convert';
-//
-// import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-//
-// import '../ligin/network/endpoints.dart';
-// import '../ligin/network/save_token.dart';
-// import '../model/activemodel.dart';
-//
-// class ActiveSharingPage extends StatefulWidget {
+// // import 'package:flutter/material.dart';
+// // import 'package:provider/provider.dart';
+// //
+// // import '../ligin/network/Request/active_sharing/Active_Sharing.dart';
+// //
+// // class ReceiverPage extends StatelessWidget {
+// //   @override
+// //   Widget build(BuildContext context) {
+// //     final provider = Provider.of<ActiveSharingProvider>(context);
+// //
+// //     return Scaffold(
+// //       appBar: AppBar(title: Text('Receiver Page')),
+// //       body:
+// //           provider.isLoading
+// //               ? Center(child: CircularProgressIndicator())
+// //               : ListView.builder(
+// //                 itemCount: provider.nearestUsers.length,
+// //                 itemBuilder: (context, index) {
+// //                   final user = provider.nearestUsers[index];
+// //                   return ListTile(
+// //                     title: Text(user.user.name),
+// //                     subtitle: Text(' ${user.user.email}'),
+// //                   );
+// //                 },
+// //               ),
+// //       floatingActionButton: FloatingActionButton(
+// //         onPressed: () async {
+// //           await provider.fetchNearestUsers();
+// //         },
+// //         child: Icon(Icons.refresh),
+// //       ),
+// //     );
+// //   }
+// // }
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../ligin/network/Request/active_sharing/Active_Sharing.dart';
+import '../ligin/network/Request/followers/postfollowers.dart';
+
+// class ReceiverPage extends StatefulWidget {
 //   @override
-//   _ActiveSharingPageState createState() => _ActiveSharingPageState();
+//   _ReceiverPageState createState() => _ReceiverPageState();
 // }
 //
-// class _ActiveSharingPageState extends State<ActiveSharingPage> {
-//   List<NearestUser> nearestUsers = [];
-//
-//   Future<void> fetchActiveSharing(BuildContext context) async {
-//     try {
-//       final token = await SharedPreferencesHelper.getToken();
-//       if (token == null) {
-//         _showMessage(context, 'Token not found. Please login again.');
-//         return;
-//       }
-//
-//       final response = await http.get(
-//         Uri.parse(Endpoints.links), // Adjust the URL accordingly.
-//         headers: _buildHeaders(token),
-//       );
-//       print(response.statusCode);
-//       if (response.statusCode == 200) {
-//         _handleSuccessResponse(response.body);
-//       } else {
-//         _showMessage(context, 'Error: ${response.statusCode}');
-//       }
-//     } catch (e) {
-//       _showMessage(context, 'Exception: $e');
-//     }
-//   }
-//
-//   void _handleSuccessResponse(String responseBody) {
-//     final Map<String, dynamic>? map = jsonDecode(responseBody);
-//     print("#########${map}");
-//     if (map != null && map.containsKey('active')) {
-//       final List list = map['active'];
-//
-//       setState(() {
-//         nearestUsers = list.map((item) => NearestUser.fromJson(item)).toList();
-//       });
-//     }
-//     print("#########${nearestUsers}");
-//   }
-//
-//   Map<String, String> _buildHeaders(String token) {
-//     return {
-//       'Authorization': 'Bearer $token',
-//       'Content-Type': 'application/json',
-//     };
-//   }
-//
-//   void _showMessage(BuildContext context, String message) {
-//     ScaffoldMessenger.of(
-//       context,
-//     ).showSnackBar(SnackBar(content: Text(message)));
-//   }
+// class _ReceiverPageState extends State<ReceiverPage> {
+//   ActiveSharingProvider? _activeSharingProvider;
 //
 //   @override
 //   void initState() {
 //     super.initState();
-//     fetchActiveSharing(context); // Fetch data when the screen is loaded.
+//     _activeSharingProvider = Provider.of<ActiveSharingProvider>(
+//       context,
+//       listen: false,
+//     );
+//     _activateSharing();
+//   }
+//
+//   @override
+//   void dispose() {
+//     _deactivateSharing();
+//     super.dispose();
+//   }
+//
+//   Future<void> _activateSharing() async {
+//     final success = await _activeSharingProvider?.setActiveSharing('receiver');
+//     if (success == true) {
+//       ScaffoldMessenger.of(
+//         context,
+//       ).showSnackBar(SnackBar(content: Text('You are now a receiver!')));
+//     } else {
+//       ScaffoldMessenger.of(
+//         context,
+//       ).showSnackBar(SnackBar(content: Text('Failed to set as receiver!')));
+//     }
+//   }
+//
+//   Future<void> _deactivateSharing() async {
+//     final success = await _activeSharingProvider?.removeActiveSharing();
+//     if (success == true) {
+//       print('Receiver deactivated successfully');
+//     } else {
+//       print('Failed to deactivate receiver');
+//     }
 //   }
 //
 //   @override
 //   Widget build(BuildContext context) {
+//     final provider = Provider.of<ActiveSharingProvider>(context);
+//
 //     return Scaffold(
-//       appBar: AppBar(title: Text('Active Sharing')),
+//       appBar: AppBar(title: Text('Receiver Page')),
 //       body:
-//           nearestUsers.isEmpty
+//           provider.isLoading
 //               ? Center(child: CircularProgressIndicator())
 //               : ListView.builder(
-//                 itemCount: nearestUsers.length,
+//                 itemCount: provider.nearestUsers.length,
 //                 itemBuilder: (context, index) {
-//                   final user = nearestUsers[index].user;
-//                   return Card(
-//                     margin: EdgeInsets.all(8.0),
-//                     child: ListTile(
-//                       title: Text(user.name),
-//                       subtitle: Text(user.email),
-//                     ),
+//                   final user = provider.nearestUsers[index];
+//                   return ListTile(
+//                     title: Text(user.user.name),
+//                     subtitle: Text(' ${user.user.email}'),
 //                   );
 //                 },
 //               ),
+//       floatingActionButton: FloatingActionButton(
+//         onPressed: () async {
+//           await provider.fetchNearestUsers();
+//         },
+//         child: Icon(Icons.refresh),
+//       ),
 //     );
 //   }
 // }
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../ligin/network/user_providre.dart';
+class ReceiverPage extends StatefulWidget {
+  @override
+  _ReceiverPageState createState() => _ReceiverPageState();
+}
 
-class ReceiverPage extends StatelessWidget {
+class _ReceiverPageState extends State<ReceiverPage> {
+  ActiveSharingProvider? _activeSharingProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    _activeSharingProvider = Provider.of<ActiveSharingProvider>(
+      context,
+      listen: false,
+    );
+    _activateSharing();
+  }
+
+  @override
+  void dispose() {
+    _deactivateSharing();
+    super.dispose();
+  }
+
+  Future<void> _activateSharing() async {
+    final success = await _activeSharingProvider?.setActiveSharing('receiver');
+    if (success == true) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('You are now a receiver!')));
+    } else {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to set as receiver!')));
+    }
+  }
+
+  Future<void> _deactivateSharing() async {
+    final success = await _activeSharingProvider?.removeActiveSharing();
+    if (success == true) {
+      print('Receiver deactivated successfully');
+    } else {
+      print('Failed to deactivate receiver');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ActiveSharingProvider>(context);
+    final followersApi = Provider.of<FollowersApi>(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text('Receiver Page')),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Receiver Page'),
+            Text(
+              'Followers: ${followersApi.followerCount}',
+              style: TextStyle(fontSize: 16),
+            ),
+          ],
+        ),
+      ),
       body:
           provider.isLoading
               ? Center(child: CircularProgressIndicator())
@@ -115,6 +187,15 @@ class ReceiverPage extends StatelessWidget {
                   return ListTile(
                     title: Text(user.user.name),
                     subtitle: Text(' ${user.user.email}'),
+                    trailing: ElevatedButton(
+                      onPressed: () async {
+                        await followersApi.postFollow(
+                          context,
+                          user.user.id.toString(),
+                        );
+                      },
+                      child: Text('Follow'),
+                    ),
                   );
                 },
               ),

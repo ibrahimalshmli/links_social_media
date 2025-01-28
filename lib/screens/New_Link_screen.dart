@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:links_social_media/ligin/network/Request/Link/add_link.dart';
-import 'package:links_social_media/ligin/widget/button_widget.dart';
-import 'package:links_social_media/ligin/widget/textfiled_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../widgets/button_widget.dart';
+import '../widgets/textfiled_widget.dart';
 
 class NewLinkScreen extends StatelessWidget {
   NewLinkScreen({super.key});

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:links_social_media/ligin/screen/Onboarding_Screen.dart';
+import 'package:links_social_media/screens/Onboarding_Screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../screens/homescrren.dart';

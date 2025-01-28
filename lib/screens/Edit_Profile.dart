@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:links_social_media/ligin/network/Request/Link/edit_link.dart';
-import 'package:links_social_media/ligin/widget/button_widget.dart';
-import 'package:links_social_media/ligin/widget/textfiled_widget.dart';
 import 'package:links_social_media/screens/Profile_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../model/mymodel.dart';
+import '../widgets/button_widget.dart';
+import '../widgets/textfiled_widget.dart';
 
 class EditScreen extends StatefulWidget {
   final LinkMymodel linkData;

@@ -1,106 +1,92 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
-import '../ligin/network/endpoints.dart';
-import '../ligin/network/save_token.dart';
-import '../model/mymodel.dart';
+import '../ligin/network/Request/followers/postfollowers.dart';
+import '../ligin/network/Request/search/search.dart';
 
-class SearchScreen extends StatefulWidget {
+class SearchPage extends StatefulWidget {
   @override
-  _SearchScreenState createState() => _SearchScreenState();
+  _SearchPageState createState() => _SearchPageState();
 }
 
-class _SearchScreenState extends State<SearchScreen> {
-  final TextEditingController _searchController = TextEditingController();
+class _SearchPageState extends State<SearchPage> {
+  TextEditingController _searchController = TextEditingController();
 
-  List<User> users = [];
-  Future<List<User>?> searchUser(String name, BuildContext context) async {
-    final String? token = await SharedPreferencesHelper.getToken();
-    print(token);
-    if (token == null) {
-      print("Error: Token not found.");
-    }
-    try {
-      String? token = await SharedPreferencesHelper.getToken();
-
-      if (token == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Token not found. Please login again.')),
-        );
-        return [];
-      }
-
-      var response = await http.post(
-        Uri.parse(Endpoints.search),
-        headers: {"Authorization": "Bearer $token"},
-        body: {
-          "name": "momo", // Corrected to use .text
-        },
-      );
-      if (response.statusCode == 200) {
-        print(response.statusCode);
-
-        final responseData = json.decode(response.body);
-        print(responseData);
-        setState(() {
-          users = [];
-        });
-      } else {
-        setState(() {
-          users = [];
-        });
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('No user data found.')));
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Exception: $e')));
-      print(e);
-    }
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Search User')),
+      appBar: AppBar(title: const Text('Search Users')),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            // حقل إدخال النص للبحث
+            // حقل البحث
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                labelText: 'Enter name',
-                border: OutlineInputBorder(),
+                labelText: 'Search by name',
+                hintText: 'Enter user name',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.search),
+                  icon: Icon(Icons.clear),
                   onPressed: () {
-                    searchUser(_searchController.text, context);
+                    _searchController.clear();
+                    setState(() {
+                      // إعادة تعيين نتائج البحث عند مسح النص
+                      Provider.of<FetchUser>(context, listen: false).users = [];
+                    });
                   },
                 ),
               ),
+              onChanged: (query) {
+                if (query.isNotEmpty) {
+                  Provider.of<FetchUser>(
+                    context,
+                    listen: false,
+                  ).searchUser(query, context);
+                }
+              },
             ),
-            SizedBox(height: 20),
-            // عرض نتائج البحث
-            Expanded(
-              child:
-                  users.isEmpty
-                      ? Center(child: Text('No results found.'))
-                      : ListView.builder(
-                        itemCount: users.length,
-                        itemBuilder: (context, index) {
-                          final user = users[index];
-                          return ListTile(
-                            title: Text(user.name),
-                            subtitle: Text(user.email),
-                          );
-                        },
-                      ),
+            const SizedBox(height: 16),
+
+            // عرض قائمة المستخدمين الذين تم العثور عليهم
+            Consumer<FetchUser>(
+              builder: (context, fetchUserProvider, child) {
+                final users = fetchUserProvider.users;
+                if (users.isEmpty) {
+                  return const Center(child: Text('No users found.'));
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: users.length,
+                      itemBuilder: (context, index) {
+                        final user = users[index];
+                        return ListTile(
+                          title: Text(user.name ?? 'No Name'),
+                          subtitle: Text(user.email ?? 'No Email'),
+                          trailing: ElevatedButton(
+                            onPressed: () {
+                              // عند الضغط على زر متابعة، نقوم بإرسال الطلب
+                              Provider.of<FollowersApi>(
+                                context,
+                                listen: false,
+                              ).postFollow(context, user.id.toString());
+                            },
+                            child: const Text('Follow'),
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),

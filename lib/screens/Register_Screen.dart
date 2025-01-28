@@ -459,11 +459,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:links_social_media/ligin/network/Request/login/register.dart';
-import 'package:links_social_media/ligin/widget/button_register.dart';
-import 'package:links_social_media/ligin/widget/button_widget.dart';
-import 'package:links_social_media/ligin/widget/textfiled_widget.dart';
 import 'package:links_social_media/model/mymodel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../widgets/button_register.dart';
+import '../widgets/button_widget.dart';
+import '../widgets/textfiled_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});

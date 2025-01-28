@@ -1,54 +1,7 @@
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-//
-// import '../ligin/network/Request/followers/getfollowers.dart';
-//
-// class FollowingScreen extends StatefulWidget {
-//   @override
-//   _FollowingScreenState createState() => _FollowingScreenState();
-// }
-//
-// class _FollowingScreenState extends State<FollowingScreen> {
-//   // final FollowApi _followApi = FollowApi();
-//   // List<Folloewmodel> following = [];
-//   // bool isLoading = true;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     final follow = Provider.of<FollowApi>(context);
-//     return Scaffold(
-//       body: Column(
-//         children: [
-//           follow.folloewmodel.isEmpty
-//               ? const Center(child: CircularProgressIndicator())
-//               : Expanded(
-//                 // قم بتغليف القائمة بـ Expanded
-//                 child: ListView.builder(
-//                   itemCount: follow.folloewmodel.length,
-//                   itemBuilder: (context, index) {
-//                     return ListTile(
-//                       title: Text('${follow.folloewmodel[index].userId}'),
-//                       subtitle: Text(
-//                         '${follow.folloewmodel[index].followeeId}',
-//                       ),
-//                     );
-//                   },
-//                 ),
-//               ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../ligin/network/Request/followers/getfollowers.dart';
+import '../ligin/network/Request/followers/getfollowing.dart';
 
 class FollowingScreen extends StatefulWidget {
   @override

@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../ligin/network/Request/Link/get_link.dart';
-import '../ligin/network/endpoints.dart';
-import '../ligin/network/save_token.dart';
+import '../network/endpoints.dart';
+import '../network/save_token.dart';
 import '../screens/Edit_Profile.dart';
 
 Expanded buildExpanded(GetLinks getLinks, BuildContext context) {

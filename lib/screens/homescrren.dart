@@ -21,7 +21,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final AuthService _authService = AuthService();
-  //late SharedPreferences pref;
   User? user;
 
   @override
@@ -37,17 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         actions: [
-          // InkWell(
-          //   onTap: () {
-          //     Navigator.of(context).pushReplacement(
-          //       MaterialPageRoute(
-          //         builder: (_) {
-          //           return SearchScreen();
-          //         },
-          //       ),
-          //     );
-          //   },
-          //   child:
           Padding(
             padding: const EdgeInsets.all(15),
             child: IconButton(
@@ -55,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) {
-                      return SearchScreen();
+                      return SearchPage();
                     },
                   ),
                 );

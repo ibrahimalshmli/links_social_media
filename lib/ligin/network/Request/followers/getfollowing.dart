@@ -4,27 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:links_social_media/network/endpoints.dart';
 
-import '../../../../model/mymodel.dart';
+import '../../../../model/follower.dart';
 import '../../../../network/save_token.dart';
 
-class GetLinks extends ChangeNotifier {
-  List<LinkMymodel> linkMymodel = [];
-  // int? selectedId;
-  Future<void> getLink(BuildContext context) async {
+class FollowApi extends ChangeNotifier {
+  List<Following> following = [];
+
+  Future<void> getfollow(BuildContext context) async {
     try {
       final token = await SharedPreferencesHelper.getToken();
       if (token == null) {
         _showMessage(context, 'Token not found. Please login again.');
         return;
       }
+      print(token);
 
       final response = await http.get(
-        Uri.parse(Endpoints.links),
+        Uri.parse(Endpoints.follow),
         headers: _buildHeaders(token),
       );
 
       if (response.statusCode == 200) {
         _handleSuccessResponse(response.body);
+        print(response.body);
+        print(response);
       } else {
         _showMessage(context, 'Error: ${response.statusCode}');
       }
@@ -33,25 +36,21 @@ class GetLinks extends ChangeNotifier {
     }
   }
 
-  void _handleSuccessResponse(String responseBody) async {
-    final Map<String, dynamic>? map = jsonDecode(responseBody);
-    if (map != null && map.containsKey('links')) {
-      final List list = map['links'];
-
-      linkMymodel =
-          list
-              .map(
-                (item) => LinkMymodel(
-                  id: item['id'],
-                  title: item['title'],
-                  link: item['link'],
-                  username: item['username'],
-                  isActive: item['isActive'],
-                ),
-              )
-              .toList();
-
+  void _handleSuccessResponse(String responseBody) {
+    try {
+      final Map<String, dynamic> map = jsonDecode(responseBody);
+      if (map.containsKey('following') && map['following'] is List) {
+        following = List<Following>.from(
+          map["following"].map((x) => Following.fromJson(x)),
+        );
+      } else {
+        following = [];
+        print("No 'links' field found or it's not a list.");
+      }
       notifyListeners();
+    } catch (e) {
+      print("Error parsing response: $e");
+      following = [];
     }
   }
 
@@ -67,12 +66,4 @@ class GetLinks extends ChangeNotifier {
       context,
     ).showSnackBar(SnackBar(content: Text(message)));
   }
-
-  //
-  // void setSelectedId(int? id) {
-  //   selectedId = id.t;
-  //   notifyListeners();
-  // }
-  //
-  // int? get getSelectedId => selectedId;
 }
